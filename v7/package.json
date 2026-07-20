@@ -1,0 +1,23 @@
+{
+  "name": "xbstack-ai-sdk-v7-fixture",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx src/experiment.ts"
+  },
+  "dependencies": {
+    "ai": "7.0.31",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/json-schema": "7.0.15",
+    "@types/node": "22.15.30",
+    "tsx": "4.20.5",
+    "typescript": "5.8.3"
+  }
+}

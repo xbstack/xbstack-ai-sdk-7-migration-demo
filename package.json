@@ -1,0 +1,20 @@
+{
+  "name": "xbstack-ai-sdk-7-migration-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "setup": "npm ci --prefix v6 && npm ci --prefix v7",
+    "typecheck": "npm --prefix v6 run typecheck && npm --prefix v7 run typecheck",
+    "test:v6": "npm --prefix v6 test",
+    "test:v7": "npm --prefix v7 test",
+    "test:fixtures": "npm run test:v6 && npm run test:v7",
+    "benchmark": "node scripts/build-comparison.mjs",
+    "test": "npm run typecheck && npm run test:fixtures && npm run benchmark",
+    "verify": "npm test"
+  }
+}

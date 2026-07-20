@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-07-20T07:06:40.805Z",
+  "methodology": {
+    "mode": "deterministic provider-free fixtures",
+    "performanceClaim": false,
+    "purpose": "Compare control flow, persistence shape, cancellation, retry state, tool aggregation and timeout semantics without model quality or network variance."
+  },
+  "environment": {
+    "node": "v22.18.0",
+    "v6": "6.0.230",
+    "v7": "7.0.31"
+  },
+  "compatibility": [
+    {
+      "concern": "instruction option",
+      "v6": "system",
+      "v7": "instructions"
+    },
+    {
+      "concern": "completion callback",
+      "v6": "onFinish",
+      "v7": "onEnd"
+    },
+    {
+      "concern": "full event stream",
+      "v6": "fullStream",
+      "v7": "stream"
+    },
+    {
+      "concern": "timeout strategy",
+      "v6": "application AbortController and timer",
+      "v7": "first-class totalMs, stepMs and chunkMs configuration"
+    },
+    {
+      "concern": "top-level toolCalls semantics",
+      "v6": "0 on successful two-step run",
+      "v7": "1 on successful two-step run"
+    },
+    {
+      "concern": "raw response message count",
+      "v6": 3,
+      "v7": 1
+    }
+  ],
+  "scenarios": {
+    "toolCalling": {
+      "sameFinalText": true,
+      "v6TopLevelToolCalls": 0,
+      "v7TopLevelToolCalls": 1,
+      "v7FinalStepToolCalls": 0,
+      "conclusion": "AI SDK 7 top-level tool fields represent the full run. Use finalStep when code needs final-step-only semantics."
+    },
+    "persistence": {
+      "normalizedFlowMatches": true,
+      "normalizedFlow": [
+        "conversation",
+        "message",
+        "tool_call",
+        "tool_result",
+        "final_response"
+      ],
+      "v6RawResponseMessages": 3,
+      "v7RawResponseMessages": 1,
+      "conclusion": "Persist a version-neutral event model and keep raw SDK response messages as audit evidence instead of treating their count or shape as a stable database contract."
+    },
+    "failure": {
+      "v6ContentTypes": [
+        [
+          "tool-call",
+          "tool-error"
+        ],
+        [
+          "text"
+        ]
+      ],
+      "v7ContentTypes": [
+        [
+          "tool-call",
+          "tool-error"
+        ],
+        [
+          "text"
+        ]
+      ],
+      "v6TopLevelToolCalls": 0,
+      "v7TopLevelToolCalls": 1,
+      "conclusion": "Both fixtures expose a tool-error part, but full-run aggregation differs. A failed call is not a successful tool result."
+    },
+    "abort": {
+      "v6Safe": true,
+      "v7Safe": true,
+      "reasons": [
+        "page_closed",
+        "network_disconnected",
+        "manual_cancel"
+      ],
+      "invariant": "Persist completed tool state before final generation, mark the run aborted, and enforce idempotency so a resumed request cannot execute the same tool twice."
+    },
+    "retry": {
+      "v6RunStatus": "succeeded",
+      "v7RunStatus": "succeeded",
+      "v6Attempts": [
+        {
+          "attempt": 1,
+          "status": "running"
+        },
+        {
+          "attempt": 1,
+          "status": "failed",
+          "error": "transient fixture failure"
+        },
+        {
+          "attempt": 2,
+          "status": "running"
+        },
+        {
+          "attempt": 2,
+          "status": "succeeded"
+        }
+      ],
+      "v7Attempts": [
+        {
+          "attempt": 1,
+          "status": "running"
+        },
+        {
+          "attempt": 1,
+          "status": "failed",
+          "error": "transient fixture failure"
+        },
+        {
+          "attempt": 2,
+          "status": "running"
+        },
+        {
+          "attempt": 2,
+          "status": "succeeded"
+        }
+      ],
+      "conclusion": "Tool retries are an application policy. Track each attempt separately from the SDK step and expose one final tool result to the model."
+    },
+    "timeout": {
+      "v6": {
+        "configuredTotalMs": 20,
+        "mechanism": "external AbortController",
+        "observedErrorName": "Error"
+      },
+      "v7": {
+        "configuredTotalMs": 20,
+        "mechanism": "SDK timeout.totalMs",
+        "observedErrorName": "TimeoutError"
+      },
+      "conclusion": "AI SDK 7 provides first-class total, step and chunk timeout configuration. AI SDK 6 requires an application-owned AbortController and timer for equivalent control."
+    }
+  },
+  "recommendation": {
+    "upgrade": true,
+    "conditions": [
+      "Audit top-level toolCalls and toolResults reads.",
+      "Move final-step-only logic to finalStep.",
+      "Normalize persistence before switching production traffic.",
+      "Propagate AbortSignal through providers and tools.",
+      "Define idempotency keys and explicit retry records for side-effecting tools.",
+      "Run the same deterministic fixture in CI before upgrading provider packages."
+    ]
+  }
+}

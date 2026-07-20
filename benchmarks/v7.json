@@ -1,0 +1,358 @@
+{
+  "suiteVersion": 2,
+  "sdkVersion": "7.0.31",
+  "nodeVersion": "v22.18.0",
+  "lifecycle": "onEnd",
+  "instructionField": "instructions",
+  "streamProperty": "stream",
+  "timeoutStrategy": "first-class totalMs, stepMs and chunkMs configuration",
+  "timeoutConfiguration": [
+    "totalMs",
+    "stepMs",
+    "chunkMs"
+  ],
+  "multiStep": {
+    "text": "Order A-100 is ready for pickup.",
+    "steps": 2,
+    "topLevelToolCalls": 1,
+    "topLevelToolResults": 1,
+    "finalStepToolCalls": 0,
+    "finalStepToolResults": 0,
+    "responseMessages": 1,
+    "endCallbackSteps": 2
+  },
+  "persistence": {
+    "strategy": "persist input first, normalize completed SDK steps, and treat top-level fields as full-run aggregation; retain raw response.messages only as audit evidence",
+    "rawResponseMessageCount": 1,
+    "rawResponseMessages": [
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Order A-100 is ready for pickup."
+          }
+        ]
+      }
+    ],
+    "normalizedFlow": [
+      "conversation",
+      "message",
+      "tool_call",
+      "tool_result",
+      "final_response"
+    ],
+    "events": [
+      {
+        "sequence": 1,
+        "type": "conversation",
+        "status": "created",
+        "payload": {
+          "conversationId": "conversation-A-100"
+        }
+      },
+      {
+        "sequence": 2,
+        "type": "message",
+        "status": "completed",
+        "payload": {
+          "role": "user",
+          "text": "What is the status of order A-100?"
+        }
+      },
+      {
+        "sequence": 3,
+        "type": "tool_call",
+        "status": "completed",
+        "payload": {
+          "toolCallId": "lookup-1",
+          "toolName": "lookupOrder",
+          "input": {
+            "orderId": "A-100"
+          }
+        }
+      },
+      {
+        "sequence": 4,
+        "type": "tool_result",
+        "status": "completed",
+        "payload": {
+          "toolCallId": "lookup-1",
+          "output": {
+            "orderId": "A-100",
+            "status": "ready_for_pickup"
+          }
+        }
+      },
+      {
+        "sequence": 5,
+        "type": "final_response",
+        "status": "completed",
+        "payload": {
+          "role": "assistant",
+          "text": "Order A-100 is ready for pickup."
+        }
+      }
+    ]
+  },
+  "streaming": {
+    "text": "streamed answer",
+    "partTypes": [
+      "start",
+      "start-step",
+      "text-start",
+      "text-delta",
+      "text-delta",
+      "text-end",
+      "finish-step",
+      "finish"
+    ]
+  },
+  "failure": {
+    "steps": 2,
+    "topLevelToolCalls": 1,
+    "topLevelToolResults": 0,
+    "stepContentTypes": [
+      [
+        "tool-call",
+        "tool-error"
+      ],
+      [
+        "text"
+      ]
+    ],
+    "finalText": "The tool failed, so the operation was not completed."
+  },
+  "abort": {
+    "scenarios": [
+      {
+        "reasonCode": "page_closed",
+        "providerCalls": 2,
+        "toolExecutions": 1,
+        "duplicateToolExecution": false,
+        "partialMessagesSaved": true,
+        "finalResponseSaved": false,
+        "errorName": "Error",
+        "events": [
+          {
+            "sequence": 1,
+            "type": "conversation",
+            "status": "created",
+            "payload": {
+              "conversationId": "abort-page_closed"
+            }
+          },
+          {
+            "sequence": 2,
+            "type": "message",
+            "status": "completed",
+            "payload": {
+              "role": "user",
+              "text": "Check the order and continue."
+            }
+          },
+          {
+            "sequence": 3,
+            "type": "run",
+            "status": "running",
+            "payload": {
+              "reasonCode": "page_closed"
+            }
+          },
+          {
+            "sequence": 4,
+            "type": "tool_call",
+            "status": "completed",
+            "payload": {
+              "toolCallId": "abort-tool-page_closed",
+              "reasonCode": "page_closed"
+            }
+          },
+          {
+            "sequence": 5,
+            "type": "tool_result",
+            "status": "completed",
+            "payload": {
+              "checkpoint": "saved-before-final-response"
+            }
+          },
+          {
+            "sequence": 6,
+            "type": "run",
+            "status": "aborted",
+            "payload": {
+              "reasonCode": "page_closed",
+              "errorName": "Error"
+            }
+          }
+        ]
+      },
+      {
+        "reasonCode": "network_disconnected",
+        "providerCalls": 2,
+        "toolExecutions": 1,
+        "duplicateToolExecution": false,
+        "partialMessagesSaved": true,
+        "finalResponseSaved": false,
+        "errorName": "Error",
+        "events": [
+          {
+            "sequence": 1,
+            "type": "conversation",
+            "status": "created",
+            "payload": {
+              "conversationId": "abort-network_disconnected"
+            }
+          },
+          {
+            "sequence": 2,
+            "type": "message",
+            "status": "completed",
+            "payload": {
+              "role": "user",
+              "text": "Check the order and continue."
+            }
+          },
+          {
+            "sequence": 3,
+            "type": "run",
+            "status": "running",
+            "payload": {
+              "reasonCode": "network_disconnected"
+            }
+          },
+          {
+            "sequence": 4,
+            "type": "tool_call",
+            "status": "completed",
+            "payload": {
+              "toolCallId": "abort-tool-network_disconnected",
+              "reasonCode": "network_disconnected"
+            }
+          },
+          {
+            "sequence": 5,
+            "type": "tool_result",
+            "status": "completed",
+            "payload": {
+              "checkpoint": "saved-before-final-response"
+            }
+          },
+          {
+            "sequence": 6,
+            "type": "run",
+            "status": "aborted",
+            "payload": {
+              "reasonCode": "network_disconnected",
+              "errorName": "Error"
+            }
+          }
+        ]
+      },
+      {
+        "reasonCode": "manual_cancel",
+        "providerCalls": 2,
+        "toolExecutions": 1,
+        "duplicateToolExecution": false,
+        "partialMessagesSaved": true,
+        "finalResponseSaved": false,
+        "errorName": "Error",
+        "events": [
+          {
+            "sequence": 1,
+            "type": "conversation",
+            "status": "created",
+            "payload": {
+              "conversationId": "abort-manual_cancel"
+            }
+          },
+          {
+            "sequence": 2,
+            "type": "message",
+            "status": "completed",
+            "payload": {
+              "role": "user",
+              "text": "Check the order and continue."
+            }
+          },
+          {
+            "sequence": 3,
+            "type": "run",
+            "status": "running",
+            "payload": {
+              "reasonCode": "manual_cancel"
+            }
+          },
+          {
+            "sequence": 4,
+            "type": "tool_call",
+            "status": "completed",
+            "payload": {
+              "toolCallId": "abort-tool-manual_cancel",
+              "reasonCode": "manual_cancel"
+            }
+          },
+          {
+            "sequence": 5,
+            "type": "tool_result",
+            "status": "completed",
+            "payload": {
+              "checkpoint": "saved-before-final-response"
+            }
+          },
+          {
+            "sequence": 6,
+            "type": "run",
+            "status": "aborted",
+            "payload": {
+              "reasonCode": "manual_cancel",
+              "errorName": "Error"
+            }
+          }
+        ]
+      }
+    ],
+    "invariant": "completed tool results are persisted, final response is absent, and each tool executes exactly once"
+  },
+  "retry": {
+    "runStatus": "succeeded",
+    "stepStatuses": [
+      {
+        "step": 1,
+        "status": "completed"
+      },
+      {
+        "step": 2,
+        "status": "completed"
+      }
+    ],
+    "toolStatus": "succeeded_after_retry",
+    "attempts": [
+      {
+        "attempt": 1,
+        "status": "running"
+      },
+      {
+        "attempt": 1,
+        "status": "failed",
+        "error": "transient fixture failure"
+      },
+      {
+        "attempt": 2,
+        "status": "running"
+      },
+      {
+        "attempt": 2,
+        "status": "succeeded"
+      }
+    ],
+    "sdkToolCallsAtTopLevel": 1,
+    "sdkToolResultsAtTopLevel": 1,
+    "finalStepToolCalls": 0
+  },
+  "timeout": {
+    "configuredTotalMs": 20,
+    "mechanism": "SDK timeout.totalMs",
+    "observedErrorName": "TimeoutError"
+  }
+}
