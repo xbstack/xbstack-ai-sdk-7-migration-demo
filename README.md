@@ -347,4 +347,4 @@ The benchmark files measure deterministic structural behavior only.
 
 ## License
 
-MIT © Peng Yu / XBSTACK
+MIT © Xiaobai / XBSTACK
