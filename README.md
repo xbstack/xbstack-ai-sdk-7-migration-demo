@@ -340,10 +340,10 @@ The benchmark files measure deterministic structural behavior only.
 
 ## Related XBSTACK assets
 
-- Website: <https://www.xbstack.com>
-- AI engineering articles: <https://www.xbstack.com/ai/>
-- Newsletter: <https://www.xbstack.com/newsletter/>
-- Migration article: `https://www.xbstack.com/ai/vercel-ai-sdk-7-migration-production/`
+- Chinese migration article: <https://www.xbstack.com/ai/vercel-ai-sdk-7-migration-production/?utm_source=github&utm_medium=repository&utm_campaign=ai_sdk7_migration&utm_content=readme_zh>
+- English migration article: <https://www.xbstack.com/en/ai/vercel-ai-sdk-7-migration-production/?utm_source=github&utm_medium=repository&utm_campaign=ai_sdk7_migration&utm_content=readme_en>
+- AI engineering hub: <https://www.xbstack.com/en/ai/?utm_source=github&utm_medium=repository&utm_campaign=ai_sdk7_migration&utm_content=ai_hub>
+- Newsletter: <https://www.xbstack.com/en/newsletter/?utm_source=github&utm_medium=repository&utm_campaign=ai_sdk7_migration&utm_content=newsletter>
 
 ## License
 
